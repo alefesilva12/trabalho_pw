@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8
+    container_name: backend-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: backend
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - loja-net
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -u root -psenha123 -e 'SELECT 1'"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build: .
+    container_name: backend-api
+    restart: always
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql://root:senha123@db:3306/backend"
+      SESSION_SECRET: "123456"
+      PORT: 3001
+    networks:
+      - loja-net
+
+volumes:
+  mysql_data:
+
+networks:
+  loja-net:
+    driver: bridge
