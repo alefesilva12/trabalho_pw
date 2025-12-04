@@ -1,0 +1,25 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build
+.next/
+dist/
+build/
+out/
+
+# Ambiente
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Logs
+*.log
+logs
